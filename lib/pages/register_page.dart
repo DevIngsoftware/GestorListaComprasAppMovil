@@ -26,10 +26,10 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 56,
                 backgroundColor: Colors.deepPurple,
-                child: const Icon(Icons.person_add_alt_1, size: 48, color: Colors.white),
+                child: Icon(Icons.person_add_alt_1, size: 48, color: Colors.white),
               ),
               const SizedBox(height: 24),
               Card(
@@ -69,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       _password.text.trim(),
                                     );
 
-                                    if (mounted) {
+                                    if (context.mounted) {
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -88,7 +88,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                       );
                                     }
                                   } catch (e) {
+                                    if(context.mounted){
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                    }
                                   } finally {
                                     setState(() => loading = false);
                                   }

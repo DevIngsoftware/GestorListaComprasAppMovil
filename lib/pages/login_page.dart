@@ -24,10 +24,10 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 56,
                 backgroundColor: Colors.deepPurple,
-                child: const Icon(Icons.shopping_bag_outlined, size: 48, color: Colors.white),
+                child: Icon(Icons.shopping_bag_outlined, size: 48, color: Colors.white),
               ),
               const SizedBox(height: 24),
               Card(
@@ -57,9 +57,13 @@ class _LoginPageState extends State<LoginPage> {
                                   setState(() => loading = true);
                                   try {
                                     await auth.login(_email.text.trim(), _password.text.trim());
+                                    if(context.mounted){
                                     Navigator.pushReplacementNamed(context, '/shopping');
+                                    }
                                   } catch (e) {
+                                    if(context.mounted){
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                    }
                                   } finally {
                                     setState(() => loading = false);
                                   }

@@ -23,16 +23,18 @@ class _ShoppingPageState extends State<ShoppingPage> {
       Provider.of<ShoppingProvider>(context, listen: false).fetchProducts();
     });
   }
-  
+
   // Widget para el estado vacío
   Widget _buildEmptyState() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.shopping_cart_checkout_outlined, size: 80, color: Colors.grey),
+          const Icon(Icons.shopping_cart_checkout_outlined,
+              size: 80, color: Colors.grey),
           const SizedBox(height: 16),
-          Text('Tu lista está vacía', style: Theme.of(context).textTheme.headlineSmall),
+          Text('Tu lista está vacía',
+              style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 8),
           Text(
             'Agrega tu primer producto con el botón "+"',
@@ -60,7 +62,8 @@ class _ShoppingPageState extends State<ShoppingPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text('Mi Lista de Compras', style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+          title: Text('Mi Lista de Compras',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
           elevation: 0,
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.white,
@@ -70,7 +73,9 @@ class _ShoppingPageState extends State<ShoppingPage> {
               icon: const Icon(Icons.logout),
               onPressed: () async {
                 await auth.logout();
-                Navigator.pushReplacementNamed(context, '/login');
+                if (context.mounted) {
+                  Navigator.pushReplacementNamed(context, '/login');
+                }
               },
             ),
           ],
@@ -80,7 +85,8 @@ class _ShoppingPageState extends State<ShoppingPage> {
           child: shop.items.isEmpty
               ? _buildEmptyState()
               : ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 12.0),
                   itemCount: shop.items.length,
                   itemBuilder: (_, i) {
                     final p = shop.items[i];
@@ -92,16 +98,21 @@ class _ShoppingPageState extends State<ShoppingPage> {
                         padding: const EdgeInsets.only(right: 20),
                         margin: const EdgeInsets.symmetric(vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.redAccent.withOpacity(0.8),
+                          color: Colors.redAccent.withValues(alpha: 0.8),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.delete_sweep_outlined, color: Colors.white),
+                        child: const Icon(Icons.delete_sweep_outlined,
+                            color: Colors.white),
                       ),
                       onDismissed: (_) {
-                        shop.removeProduct(p);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${p.name} eliminado')),
-                        );
+                        setState(() {
+                          shop.items.remove(p);
+                        });
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('${p.name} eliminado')),
+                          );
+                        }
                       },
                       child: ProductTile(
                         product: p,
@@ -126,7 +137,8 @@ class _ShoppingPageState extends State<ShoppingPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent, // Permite ver el borde redondeado del contenido
+      backgroundColor:
+          Colors.transparent, // Permite ver el borde redondeado del contenido
       builder: (_) => Container(
         // Contenedor que aplica el borde redondeado y color de fondo
         decoration: BoxDecoration(
@@ -135,7 +147,8 @@ class _ShoppingPageState extends State<ShoppingPage> {
         ),
         margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20),
         child: Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: EditItemPage(product: product),
         ),
       ),
