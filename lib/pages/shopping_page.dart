@@ -107,6 +107,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                       onDismissed: (_) {
                         setState(() {
                           shop.items.remove(p);
+                          shop.removeProduct(p);
                         });
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(

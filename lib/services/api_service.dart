@@ -60,6 +60,6 @@ class ApiService {
 
   Future<void> deleteProduct(int id) async {
     final res = await http.delete(Uri.parse('$baseUrl/products/$id'), headers: _headers);
-    if (res.statusCode != 200) throw Exception(res.body);
+    if (res.statusCode != 204) throw Exception(res.body);
   }
 }
